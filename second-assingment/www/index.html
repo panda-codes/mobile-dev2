@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="./css/app.min.css">
+    <!-- <link rel="stylesheet" href=""> -->
+    <style>
+      /* TODO */
+    </style>
+  </head>
+
+  <body>
+    <div class="app-page" data-page="home">
+      <div class="app-topbar">
+        <div class="app-title">Mobile app</div>
+      </div>
+      <div class="app-content">
+
+        <!-- camera section -->
+        <div class="app-section">
+          <!-- camera button -->
+          <div class="app-button" id="cam" >Camera</div>
+        </div>
+
+        <!-- location section -->
+        <div class="app-section">
+          <div class="app-button" id="location">Location</div>
+        </div>
+        
+        <!-- image -->
+        <div style="text-align: center;">
+          <img src="d" id="myImage" alt="">
+        </div>
+      </div>
+    </div>
+
+
+    <script src="cordova.js"></script>
+    <script src="./js/zepto.js"></script>
+    <script src="./js/app.min.js"></script>
+    <script>
+
+   
+
+
+     document.addEventListener("deviceready", onDeviceReady, false);
+       
+     
+      function onDeviceReady() {
+          // Wait for the device to be ready before executing code
+
+          //CAMERA
+          var cam = document.getElementById('cam')
+          cam.onclick=function(){
+
+            navigator.camera.getPicture( 
+             //onsuccess 
+            function(imageURI) {
+              var image = document.getElementById('myImage');
+              image.src = imageURI;
+          }, 
+            
+          function (message) {
+            alert('Failed because: ' + message);
+        }, 
+        
+        { quality: 50,
+              destinationType: Camera.DestinationType.FILE_URI });
+          
+          }
+
+          
+          //GEOLOCATION
+          var location = document.getElementById('location')
+          location.onclick= function(){
+            
+              navigator.geolocation.getCurrentPosition(
+                //onsucess
+                  function(position) {
+                      
+                    alert(
+                    'Latitude: '          + position.coords.latitude          + '\n' +
+                    'Longitude: '         + position.coords.longitude         + '\n' +
+                    'Altitude: '          + position.coords.altitude          + '\n' +
+                    'Accuracy: '          + position.coords.accuracy          + '\n' +
+                    'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+                    'Heading: '           + position.coords.heading           + '\n' +
+                    'Speed: '             + position.coords.speed             + '\n' +
+                    'Timestamp: '         + position.timestamp                + '\n'
+                    );
+                  },
+                  //onfail
+                  function(error) {
+                      alert("Error getting location: " + error.message);
+                  }
+              );
+          }
+      }
+      
+  setTimeout(onDeviceReady,0)
+
+
+      try {
+        App.restore();
+      } catch (err) {
+        App.load('home');
+      }
+    </script>
+  </body>
+</html>
